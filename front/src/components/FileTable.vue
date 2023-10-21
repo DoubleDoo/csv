@@ -70,6 +70,7 @@ export default defineComponent({
       currentPage: 1,
       pageSize: 10,
       size: 1,
+      sort:[] as ISort[]
     }
   },
   setup() {
@@ -120,7 +121,7 @@ export default defineComponent({
       await this.file.requestFile(this.id, {
         page: this.currentPage - 1,
         size: this.pageSize,
-        sort: [],
+        sort: this.sort,
       })
       if (this.file.curentFileData != null) this.dataSource = this.file.curentFileData
     },
@@ -144,16 +145,16 @@ export default defineComponent({
     },
     async onChange(pagination: any, filters: any, sorter: any, extra: any) {
       console.log(sorter)
-      let sort: ISort[] = []
+      this.sort = []
       if (sorter.column != undefined)
-        sort.push({
+        this.sort.push({
           column: sorter.column.title,
           dirrection: sorter.order,
         })
       await this.file.requestFile(this.id, {
         page: this.currentPage - 1,
         size: this.pageSize,
-        sort: sort,
+        sort: this.sort,
       })
       if (this.file.curentFileData != null) this.dataSource = this.file.curentFileData
     },

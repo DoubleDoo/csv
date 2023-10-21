@@ -97,21 +97,46 @@ def get_sorted_data_part(id):
     obj = db_get_file_by_id(id)
     print(data)
     file_path = os.path.join(current_app.config["UPLOAD_FOLDER"], f"{id}.csv")
-    skip_rows = data["page"] * data["size"]
+    skip_rows = data["page"] * data["size"]+1
     dataframe = pd.read_csv(
         file_path,
-        names=json.loads(obj.columns),
-        iterator=True,
-        header=None,
-        skiprows=skip_rows+1,
-        chunksize=data["size"],
-        encoding="unicode_escape",
     )
-    chunk = next(dataframe)
     if len(data["sort"])!=0:
-        chunk = chunk.sort_values(by=[data["sort"][0]["column"]], ascending=(data["sort"][0]["dirrection"]=="ascend"))
+        dataframe = dataframe.sort_values(by=[data["sort"][0]["column"]], ascending=(data["sort"][0]["dirrection"]=="ascend"))
+    
+    chunk=dataframe.iloc[skip_rows:skip_rows+data["size"]]
 
     return (
         jsonify({"file": obj.to_json(), "data": chunk.to_json(orient="records")}),
         200,
     )
+
+
+# @file.route("/<id>", methods=["POST"])
+# def get_sorted_data_part(id):
+#     jsn = request.get_json()
+#     data = {}
+#     data["page"] = jsn.get("page")
+#     data["size"] = jsn.get("size")
+#     data["sort"] = jsn.get("sort")
+#     obj = db_get_file_by_id(id)
+#     print(data)
+#     file_path = os.path.join(current_app.config["UPLOAD_FOLDER"], f"{id}.csv")
+#     skip_rows = data["page"] * data["size"]
+#     dataframe = pd.read_csv(
+#         file_path,
+#         names=json.loads(obj.columns),
+#         iterator=True,
+#         header=None,
+#         skiprows=skip_rows,
+#         chunksize=data["size"],
+#         encoding="unicode_escape",
+#     )
+#     chunk = next(dataframe)
+#     if len(data["sort"])!=0:
+#         chunk = chunk.sort_values(by=[data["sort"][0]["column"]], ascending=(data["sort"][0]["dirrection"]=="ascend"))
+
+#     return (
+#         jsonify({"file": obj.to_json(), "data": chunk.to_json(orient="records")}),
+#         200,
+#     )
