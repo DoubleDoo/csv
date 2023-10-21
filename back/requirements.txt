@@ -1,0 +1,11 @@
+waitress
+flask
+werkzeug
+sqlalchemy
+flask_sqlalchemy
+psycopg2-binary
+gunicorn
+PyJWT
+flask-swagger-ui
+flask-cors
+pandas

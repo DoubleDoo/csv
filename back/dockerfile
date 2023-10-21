@@ -1,0 +1,15 @@
+FROM python:3.12.0-bookworm
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+RUN pip install --upgrade pip
+COPY requirements.txt /app/requirements.txt
+RUN apt update && apt install -y gcc python3-dev musl-dev g++ && pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+
+COPY . /app
+
+CMD [ "gunicorn", "-w", "2", "--bind", "0.0.0.0:5000", "main:app", "--log-level", "debug"]
+
+
