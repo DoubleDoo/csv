@@ -20,8 +20,8 @@ SWAGGER_URL = /api
 VITE_APP_OUTPUT_PORT = 80
 VITE_APP_API_OUTPUT_PORT = 90
 
-После превого запуска перейдите по ссылке localhost:90/user/init
-
+3. Запустите командой docker-compose up --build
+4. После превого запуска перейдите по ссылке localhost:90/user/init
 Будет создано два пользователя
 
 login: admin@admin.ru
