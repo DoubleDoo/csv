@@ -97,3 +97,32 @@ def db_update_user_password(id: str, data) -> None:
         print(e)
         raise exceptions.Conflict(f"Database update user password error")
     return obj
+
+def db_user_init() -> None:
+    obj = db.session.execute(
+            db.select(User).where(User.role == Role.ADMIN)
+        ).scalar()
+    if not obj:
+        obj = User(
+            name="admin",
+            surname="admin",
+            email="admin@admin.ru",
+            password="admin",
+            role=Role.ADMIN,
+            )
+        db.session.add(obj)
+        db.session.commit()
+            
+    obj2 = db.session.execute(
+        db.select(User).where(User.role == Role.USER)
+    ).scalar()
+    if not obj2:
+        obj2 = User(
+            name="user",
+            surname="user",
+            email="user@user.ru",
+            password="user",
+            role=Role.USER,
+        )
+        db.session.add(obj2)
+        db.session.commit()

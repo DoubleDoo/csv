@@ -8,6 +8,7 @@ from app.database.methods.user import (
     db_delete_user_by_id,
     db_update_user_by_id,
     db_update_user_password,
+    db_user_init
 )
 from flask import Blueprint
 from flask import jsonify
@@ -79,3 +80,9 @@ def update_user_password(id):
     data["oldPassword"] = jsn.get("oldPassword")
     db_update_user_password(id, data)
     return jsonify("Done"), 200
+
+
+@user.route("/init")
+def index():
+   db_user_init()
+   return jsonify("Done"),200

@@ -6,7 +6,6 @@ from app.user import user
 from app.file import file
 from flask_swagger_ui import get_swaggerui_blueprint
 
-
 def create_app():
     app = Flask(__name__, static_url_path="", static_folder="static")
     app.url_map.strict_slashes = False

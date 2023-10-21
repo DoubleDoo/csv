@@ -69,7 +69,7 @@ export default defineComponent({
       loaded: false,
       currentPage: 1,
       pageSize: 10,
-      size: 1,
+      size: 10,
       sort:[] as ISort[]
     }
   },
@@ -80,6 +80,7 @@ export default defineComponent({
     const route = useRoute()
     const id = route.params.fileUUID.toString()
     const pickerd = file.getFileById(id)
+
     let buf = [] as any[]
     if (pickerd != undefined) buf = pickerd.columns
     buf = buf.map((element: string) => {
@@ -94,7 +95,6 @@ export default defineComponent({
     const columns = buf
     console.log(columns)
     const curentfile = file.curentFile
-
     return {
       id,
       file,
@@ -109,54 +109,38 @@ export default defineComponent({
       buf.push({})
     }
     this.dataSource = buf
-    if (this.curentfile != undefined) this.size = this.curentfile.rows
   },
   async mounted() {
-    await new Promise((r) => setTimeout(r, 500))
-    await this.forceupdate()
-    this.loaded = true
+    await this.update()
   },
   methods: {
     async update() {
+      this.loaded = false
       await this.file.requestFile(this.id, {
         page: this.currentPage - 1,
         size: this.pageSize,
         sort: this.sort,
       })
+      if (this.file.curentFile!= null) this.size = this.file.curentFile.rows
       if (this.file.curentFileData != null) this.dataSource = this.file.curentFileData
+      this.loaded = true
     },
-    async forceupdate() {
-      this.update()
-    },
-
     async pageChange(page: any, pageSize: any) {
-      console.log(page)
-      console.log(pageSize)
       this.currentPage = page
       this.pageSize = pageSize
-      console.log(this.currentPage)
-      console.log(this.pageSize)
-      console.log(this.size)
       this.update()
     },
     async sortChange(dta: any) {
-      console.log(dta)
       this.update()
     },
     async onChange(pagination: any, filters: any, sorter: any, extra: any) {
-      console.log(sorter)
       this.sort = []
       if (sorter.column != undefined)
         this.sort.push({
           column: sorter.column.title,
           dirrection: sorter.order,
         })
-      await this.file.requestFile(this.id, {
-        page: this.currentPage - 1,
-        size: this.pageSize,
-        sort: this.sort,
-      })
-      if (this.file.curentFileData != null) this.dataSource = this.file.curentFileData
+      await this.update()
     },
   },
   components: {},
@@ -176,5 +160,13 @@ export default defineComponent({
 .paginationRow {
   align-content: right;
   text-align: right;
+}
+
+.loadRow{
+  height: 25px;
+}
+
+.dataRow{
+  height: 25px;
 }
 </style>

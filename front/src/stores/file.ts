@@ -60,7 +60,6 @@ export const useFileStore = defineStore({
     async requestFile(id: string, obj: IFilePageRequest) {
       await api_getFile(id, obj).then((res) => {
         if (res) {
-          console.log(res)
           this.curentFile = res.file
           this.curentFileData = res.data
         }

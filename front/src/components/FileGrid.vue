@@ -106,7 +106,7 @@ export default defineComponent({
   },
   created() {},
   async mounted() {
-    this.file.requestFiles()
+    // this.file.requestFiles()
     this.dataSource = this.file.getFiles
     this.loaded = true
   },

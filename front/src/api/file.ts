@@ -92,7 +92,13 @@ export const api_postFile = async (data: any) => {
       },
     })
     .then(function (response) {
-      return response.data as IFile
+      return {
+          id: response.data.id,
+          name: response.data.name,
+          columns: JSON.parse(response.data.columns),
+          rows: response.data.rows,
+          types: JSON.parse(response.data.types),
+        } as IFile
     })
     .catch(function (error) {
       console.log(error)

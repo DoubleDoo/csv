@@ -9,3 +9,4 @@ PyJWT
 flask-swagger-ui
 flask-cors
 pandas
+flask-restplus
